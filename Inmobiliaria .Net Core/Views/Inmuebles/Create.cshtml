@@ -1,0 +1,70 @@
+﻿@model Inmobiliaria_.Net_Core.Models.Inmueble
+@{
+    ViewData["Title"] = "Nuevo Inmueble";
+}
+
+<h4>Nuevo Inmueble</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ambientes" class="control-label"></label>
+                <input asp-for="Ambientes" class="form-control" />
+                <span asp-validation-for="Ambientes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label>
+                <select asp-for="Tipo" class="form-control">
+                    <option value="Casa">Casa</option>
+                    <option value="Departamento">Departamento</option>
+                    <option value="Deposito">Deposito</option>
+                    <option value="Oficina">Oficina</option>
+                </select>
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Uso" class="control-label"></label>
+                <select asp-for="Uso" class="form-control">
+                    <option value="Residencial">Vivienda</option>
+                    <option value="Comercial">Comercial</option>
+                </select>
+                <span asp-validation-for="Uso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Precio" class="control-label"></label>
+                <input asp-for="Precio" class="form-control" />
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Disponible" class="control-label"></label>
+                <select asp-for="Disponible" class="form-control">
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
+                </select>
+                <span asp-validation-for="Disponible" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Propietario</label>
+                <select class="form-control" name="IdPropietario">
+                    @foreach (var item in (IList<Propietario>)ViewBag.Propietarios)
+                    {
+                        <option value="@item.IdPropietario">@(item.Nombre + " " + item.Apellido)</option>
+                    }
+                </select>
+                <span asp-validation-for="IdPropietario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Agregar" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">Volver al listado</a>
+            </div>
+        </form>
+    </div>
+</div>
+

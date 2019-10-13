@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Inmobiliaria_.Net_Core.Models.Alquiler>
+
+@{
+    ViewData["Title"] = "Alquileres";
+}
+
+<h4>Listado Alquileres</h4>
+<br />
+<br />
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create">Agregar Nuevo</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Importe)
+            </th>
+            <th>
+                Inicio Contrato
+            </th>
+            <th>
+                Fin Contrato
+            </th>
+            <th>
+                Inquilino
+            </th>
+            <th>
+                Inmueble
+            </th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th>
+                    Accion
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Importe)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaFin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inquilino.Apellido)
+                    @Html.DisplayFor(modelItem => item.Inquilino.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inmueble.Direccion)
+                </td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.IdAlquiler" title="Editar"><span class="lnr lnr-pencil" style="font-weight:bold"></span></a>&nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.IdAlquiler" title="Eliminar"><span class="lnr lnr-cross" style="color:#fa0202; font-weight:bold"></span></a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,73 @@
+﻿
+@model IEnumerable<Inmobiliaria_.Net_Core.Models.Pago>
+
+@{
+    ViewData["Title"] = "Pagos";
+}
+
+<h4>Listado Pagos</h4>
+<br />
+<br />
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create">Agregar Nuevo</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NroPago)
+            </th>
+            <th>
+                Inquilino
+            </th>
+            <th>
+                Direccion Alquiler
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Importe)
+            </th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th>
+                    Accion
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NroPago)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Alquiler.Inquilino.Apellido)
+                    @Html.DisplayFor(modelItem => item.Alquiler.Inquilino.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Alquiler.Inmueble.Direccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Importe)
+                </td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.IdPago" title="Editar"><span class="lnr lnr-pencil" style="font-weight:bold"></span></a>&nbsp;&nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.IdPago" title="Eliminar"><span class="lnr lnr-cross" style="color:#fa0202; font-weight:bold"></span></a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

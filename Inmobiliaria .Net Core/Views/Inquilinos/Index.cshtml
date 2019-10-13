@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Inmobiliaria_.Net_Core.Models.Inquilino>
+
+@{
+    ViewData["Title"] = "Inquilinos";
+}
+
+<h4>Listado Inquilinos</h4>
+<br />
+<br />
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create">Agregar Nuevo</a>
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dni)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th>
+                    Accion
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dni)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Direccion)
+                </td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.IdInquilino" title="Editar"><span class="lnr lnr-pencil" style="font-weight:bold"></span></a>&nbsp;&nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.IdInquilino" title="Eliminar"><span class="lnr lnr-cross" style="color:#fa0202; font-weight:bold"></span></a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+
