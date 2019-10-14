@@ -32,6 +32,27 @@
     </header>
     <main role="main">
         <div class="container mt-3">
+            @if (ViewBag.Error2 != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error2
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><span class="lnr lnr-cross-circle"></span></span>
+                    </button>
+                </div>
+            }
+
+            @if (ViewBag.Alta != null)
+            {
+                <div class="alert alert-success">
+                    @ViewBag.Alta
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><span class="lnr lnr-cross-circle"></span></span>
+                    </button>
+                </div>
+            }
+
+
 
             @if (ViewBag.Id != null)
             {//alta exitosa
@@ -66,9 +87,10 @@
                     </div>
                 </environment>
             }
+            </div>
             <div class="m-1 p-1">
                 @RenderBody()
-            </div> 
+            </div>
 </main>
     <!--<footer class="footer">
         <div class="container">

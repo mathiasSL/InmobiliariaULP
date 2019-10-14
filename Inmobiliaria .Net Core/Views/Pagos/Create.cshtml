@@ -2,10 +2,12 @@
 
 @{
     ViewData["Title"] = "Nuevo pago";
+    DateTime fecha = DateTime.Today;
 }
 
-<h2>Nuevo Pago</h2>
-<hr />
+    <h4>Nuevo Pago</h4>
+<br />
+<br />
 <div class="row">
     <div class="col-lg-6">
         <form asp-action="Create">
@@ -15,21 +17,22 @@
                 <select asp-for="IdAlquiler" class="form-control">
                     @foreach (Alquiler item in (IList<Alquiler>)ViewBag.alquiler)
                     {
-                       <option value=@item.IdAlquiler> Direccion: @item.Inmueble.Direccion</option>
+                        <option value=@item.IdAlquiler> Direccion: @item.Inmueble.Direccion</option>
                     }
                 </select>
                 <span asp-validation-for="IdAlquiler" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NroPago" class="control-label">Numero de pago</label>
-                <input asp-for="NroPago" class="form-control" />
+                <input asp-for="NroPago" min="1" class="form-control" />
                 <span asp-validation-for="NroPago" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" type="date" class="form-control" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
+            @*<div class="form-group">
+                    <label asp-for="Fecha" class="control-label"></label>
+                    <input asp-for="Fecha" type="date" class="form-control" />
+                    <span asp-validation-for="Fecha" class="text-danger"></span>
+                </div>*@
+            <input type="hidden" asp-for="Fecha" value="@fecha.ToString("yyyy-mm-dd")" />
             <div class="form-group">
                 <label asp-for="Importe" class="control-label"></label>
                 <input asp-for="Importe" class="form-control" />

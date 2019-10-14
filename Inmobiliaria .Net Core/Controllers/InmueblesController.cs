@@ -22,10 +22,8 @@ namespace Inmobiliaria_.Net_Core.Controllers
         public ActionResult Index()
         {
             var lista = repositorio.ObtenerTodos();
-            //if (TempData.ContainsKey("Id"))
-            //    ViewBag.Id = TempData["Id"];
-            //if (TempData.ContainsKey("Mensaje"))
-            //    ViewBag.Mensaje = TempData["Mensaje"];
+			if (TempData.ContainsKey("Alta"))
+				ViewBag.Alta = TempData["Alta"];
 			return View(lista);
         }
         
@@ -44,33 +42,28 @@ namespace Inmobiliaria_.Net_Core.Controllers
                 if (ModelState.IsValid)
                 {
                     repositorio.Alta(entidad);
-                    TempData["Id"] = entidad.IdInmueble;
-                    return RedirectToAction(nameof(Index));
+                    TempData["Alta"] = "Inmueble agregado exitosamente!";
+					return RedirectToAction(nameof(Index));
                 }
                 else
                 {
                     ViewBag.Propietarios = repoPropietario.ObtenerTodos();
-                    return View(entidad);
+                    return View();
                 }
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
-                return View(entidad);
+                return View();
             }
         }
 
         public ActionResult Delete(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
-            //if (TempData.ContainsKey("Mensaje"))
-            //    ViewBag.Mensaje = TempData["Mensaje"];
-            //if (TempData.ContainsKey("Error"))
-            //    ViewBag.Error = TempData["Error"];
             return View(entidad);
         }
-
       
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -79,7 +72,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
             try
             {
                 repositorio.Baja(id);
-                TempData["Id"] = "";
+                TempData["Alta"] = "Inmueble eliminado";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -105,7 +98,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 			{
 				entidad.IdInmueble = id;
 				repositorio.Modificacion(entidad);
-				TempData["Id"] = "";
+				TempData["Alta"] = "Datos modificados con exito!";
 				return RedirectToAction(nameof(Index));
 			}
 			catch (Exception ex)
@@ -113,7 +106,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 				ViewBag.Propietarios = repoPropietario.ObtenerTodos();
 				ViewBag.Error = ex.Message;
 				ViewBag.StackTrate = ex.StackTrace;
-				return View(entidad);
+				return View();
 			}
 		}
 	}

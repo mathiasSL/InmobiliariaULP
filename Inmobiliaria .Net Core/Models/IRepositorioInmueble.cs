@@ -8,7 +8,7 @@ namespace Inmobiliaria_.Net_Core.Models
     public interface IRepositorioInmueble : IRepositorio<Inmueble>
     {
         IList<Inmueble> BuscarPorPropietario(int idPropietario);
-		int CambioDisponible(int p);
+		int CambioDisponible(int p, string resp);
 
 	}
 }

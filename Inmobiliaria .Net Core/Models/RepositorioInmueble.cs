@@ -77,12 +77,12 @@ namespace Inmobiliaria_.Net_Core.Models
 			return res;
 		}
 
-		public int CambioDisponible(int p)
+		public int CambioDisponible(int p, string resp)
 		{
 			int res = -1;
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
-				string sql = $"UPDATE Inmueble SET Disponible='NO' WHERE IdInmueble = {p}";
+				string sql = $"UPDATE Inmueble SET Disponible='{resp}' WHERE IdInmueble = {p}";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					//command.Parameters.Add("@disponible", SqlDbType.VarChar).Value = "NO";

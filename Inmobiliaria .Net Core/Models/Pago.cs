@@ -10,15 +10,15 @@ namespace Inmobiliaria_.Net_Core.Models
     {
 		[Key]
         public int IdPago { get; set; }
-
-        public int NroPago { get; set; }
-
-        public int IdAlquiler { get; set; }
+		[Required]
+		public int NroPago { get; set; }
+		[Required]
+		public int IdAlquiler { get; set; }
 
         public Alquiler Alquiler { get; set; }
-
-        public string Fecha { get; set; }
-
-        public decimal Importe { get; set; }
+		[Required]
+		public string Fecha { get; set; }
+		[Required]
+		public decimal Importe { get; set; }
     }
 }

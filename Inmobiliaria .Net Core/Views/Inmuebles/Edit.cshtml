@@ -1,16 +1,17 @@
 ﻿@model Inmobiliaria_.Net_Core.Models.Inmueble
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Inmueble";
 }
 
 <h4>Editar Inmueble</h4>
-<hr />
+<br />
+<br />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
             <div class="form-group">
                 <label asp-for="Direccion" class="control-label"></label>
                 <input asp-for="Direccion" class="form-control" />

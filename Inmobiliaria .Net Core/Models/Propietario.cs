@@ -19,6 +19,7 @@ namespace Inmobiliaria_.Net_Core.Models
 		public string Telefono { get; set; }
 		[Required, EmailAddress]
 		public string Email { get; set; }
+		[Required]
 		public string Clave { get; set; }
 	}
 }

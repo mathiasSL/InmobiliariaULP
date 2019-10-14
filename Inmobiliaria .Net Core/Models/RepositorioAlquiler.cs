@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Inmobiliaria_.Net_Core.Models
 {
-    public class RepositorioAlquiler : RepositorioBase, IRepositorioAlquiler
+    public class RepositorioAlquiler : RepositorioBase, IRepositorio<Alquiler>
     { 
         public RepositorioAlquiler(IConfiguration configuration) : base(configuration)
         {
@@ -28,7 +28,8 @@ namespace Inmobiliaria_.Net_Core.Models
                     connection.Open();
                     res = command.ExecuteNonQuery();
                     command.CommandText = "SELECT SCOPE_IDENTITY()";
-                    a.IdAlquiler = (int)command.ExecuteScalar();
+					var id = command.ExecuteScalar();
+					a.IdAlquiler = Convert.ToInt32(id);
                     connection.Close();
                 }
             }
@@ -65,24 +66,6 @@ namespace Inmobiliaria_.Net_Core.Models
 					command.Parameters.Add("@fechafin", SqlDbType.VarChar).Value = a.FechaFin;
 					//command.Parameters.Add("@idinquilino", SqlDbType.Int).Value = a.IdInquilino;
 					//command.Parameters.Add("@idinmueble", SqlDbType.Int).Value = a.IdInmueble;
-					command.CommandType = CommandType.Text;
-					connection.Open();
-					res = command.ExecuteNonQuery();
-					connection.Close();
-				}
-			}
-			return res;
-		}
-
-		public int CambioDisponible(int p)
-		{
-			int res = -1;
-			using (SqlConnection connection = new SqlConnection(connectionString))
-			{
-				string sql = $"UPDATE Inmueble SET Disponible=@disponible WHERE Inmueble.IdInmueble = {p}";
-				using (SqlCommand command = new SqlCommand(sql, connection))
-				{
-					command.Parameters.Add("@disponible", SqlDbType.VarChar).Value = "NO";
 					command.CommandType = CommandType.Text;
 					connection.Open();
 					res = command.ExecuteNonQuery();

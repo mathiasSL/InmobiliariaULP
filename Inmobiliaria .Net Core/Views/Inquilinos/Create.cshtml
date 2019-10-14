@@ -4,9 +4,9 @@
     ViewData["Title"] = "Nuevo Inquilino";
 }
 
-
 <h4>Nuevo Inquilino</h4>
-<hr />
+<br />
+<br />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -23,12 +23,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Dni" class="control-label"></label>
-                <input asp-for="Dni" class="form-control" />
+                <input asp-for="Dni" type="number" min="7" class="form-control" />
                 <span asp-validation-for="Dni" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
+                <input asp-for="Telefono" type="number" min="0" class="form-control" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
             <div class="form-group">

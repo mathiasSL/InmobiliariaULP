@@ -11,11 +11,11 @@ namespace Inmobiliaria_.Net_Core.Controllers
 {
     public class AlquileresController : Controller
     {
-        private readonly IRepositorioAlquiler repositorio;
+        private readonly IRepositorio<Alquiler> repositorio;
 		private readonly IRepositorioInmueble repoInmueble;
         private readonly IRepositorio<Inquilino> repoInquilino;
 
-        public AlquileresController(IRepositorioAlquiler repositorio, IRepositorioInmueble repoInmueble, IRepositorio<Inquilino> repoInquilino)
+        public AlquileresController(IRepositorio<Alquiler> repositorio, IRepositorioInmueble repoInmueble, IRepositorio<Inquilino> repoInquilino)
         {
             this.repositorio = repositorio;
             this.repoInmueble = repoInmueble;
@@ -23,67 +23,104 @@ namespace Inmobiliaria_.Net_Core.Controllers
         }
         public ActionResult Index()
         {
-            var lista = repositorio.ObtenerTodos();
-            //if (TempData.ContainsKey("IdAlquiler"))
-            //    ViewBag.Id = TempData["IdAlquiler"];
-            return View(lista);
+			var lista = repositorio.ObtenerTodos();
+			if (TempData.ContainsKey("Alta"))
+				ViewBag.Alta = TempData["Alta"];
+			if (TempData.ContainsKey("Error2"))
+				ViewBag.Error2 = TempData["Error2"];
+			return View(lista);
         }
 
         public ActionResult Create()
         {
             ViewBag.inmueble = repoInmueble.ObtenerTodos();
             ViewBag.inquilino = repoInquilino.ObtenerTodos();
-            return View();
-        }
+			int resultado = 0;
+			int resultado2 = 0;
+
+			foreach (var item in (IList<Inmueble>)ViewBag.inmueble)
+			{
+				if (item.Disponible.Equals("SI"))
+				{
+					resultado++;
+				}
+			}
+
+			foreach (var item in (IList<Inquilino>)ViewBag.inquilino)
+			{
+				if (!item.IdInquilino.Equals(" "))
+				{
+					resultado2++;
+				}
+			}
+
+			if (resultado > 0 && resultado2 > 0)
+			{
+				return View();
+			}
+			else
+			{
+				TempData["Error2"] = "No hay inmuebles o inquilinos disponibles";
+				return RedirectToAction(nameof(Index));
+			}
+			
+		}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Alquiler alquiler)
         {
-			repoInmueble.CambioDisponible(alquiler.IdInmueble);
+			
 			try
             {
-
-				repositorio.Alta(alquiler);
-				TempData["Id"] = "Se creó correctamente";
-                    return RedirectToAction(nameof(Index));
-            }
+				repoInmueble.CambioDisponible(alquiler.IdInmueble, "NO");
+				if (ModelState.IsValid)
+				{
+					repositorio.Alta(alquiler);
+					TempData["Alta"] = "Contrato de alquiler agregado correctamente";
+					return RedirectToAction(nameof(Index));
+				}
+				else
+				{
+					repoInmueble.CambioDisponible(alquiler.IdInmueble, "SI");
+					ViewBag.inmueble = repoInmueble.ObtenerTodos();
+					ViewBag.inquilino = repoInquilino.ObtenerTodos();
+					return View();
+				}
+			}
             catch (Exception ex)
             {
                 ViewBag.inmueble = repoInmueble.ObtenerTodos();
                 ViewBag.inquilino = repoInquilino.ObtenerTodos();
                 ViewBag.Error = ex.Message;
                 ViewBag.StackTrate = ex.StackTrace;
-                //return View(alquiler);
-                return RedirectToAction(nameof(Index));
+                return View();
+        
             }
         }
 
         public ActionResult Delete(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
-			//if (TempData.ContainsKey("Mensaje"))
-			//    ViewBag.Mensaje = TempData["Mensaje"];
-			//if (TempData.ContainsKey("Error"))
-			//    ViewBag.Error = TempData["Error"];
 			return View(entidad);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Inmueble entidad)
+        public ActionResult Delete(int id, Alquiler entidad)
         {
-            try
+			try
             {
-                repositorio.Baja(id);
-                TempData["Id"] = "Se eliminó correctamente";
+					
+				repositorio.Baja(id);
+                TempData["Alta"] = "Se eliminó correctamente";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                ViewBag.Error = ex.Message;
+				ViewBag.Error = "Hay pagos relacionados a este alquiler";
                 ViewBag.StackTrate = ex.StackTrace;
-                return View(entidad);
+                return View();
             }
         }
 
@@ -103,7 +140,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 			{
 				entidad.IdAlquiler = id;
 				repositorio.Modificacion(entidad);
-				TempData["Id"] = "";
+				TempData["Alta"] = "Datos modficados con exito!";
 				return RedirectToAction(nameof(Index));
 			}
 			catch (Exception ex)
@@ -112,7 +149,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 				ViewBag.inquilino = repoInquilino.ObtenerTodos();
 				ViewBag.Error = ex.Message;
 				ViewBag.StackTrate = ex.StackTrace;
-				return View(entidad);
+				return View();
 			}
 		}
 	}

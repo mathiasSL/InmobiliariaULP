@@ -20,15 +20,11 @@ namespace Inmobiliaria_.Net_Core.Controllers
         public ActionResult Index()
         {
 			var lista = repositorio.ObtenerTodos();
+			if (TempData.ContainsKey("Alta"))
+				ViewBag.Alta = TempData["Alta"];
 			return View(lista);
         }
-
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
-
-       
+   
         public ActionResult Create()
         {
             return View();
@@ -39,11 +35,27 @@ namespace Inmobiliaria_.Net_Core.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Inquilino inquilino)
         {
+			ViewBag.inquilinos = repositorio.ObtenerTodos();
+
+			foreach (var item in (IList<Inquilino>)ViewBag.inquilinos)
+			{
+				if (item.Dni == inquilino.Dni)
+				{
+					ViewBag.Error2 = "Error: Ya existe un inquilino con ese DNI";
+					return View();
+				}
+			}
+
 			try
 			{
-				repositorio.Alta(inquilino);
-				TempData["Id"] = " ";
-				return RedirectToAction(nameof(Index));
+				if (ModelState.IsValid)
+				{
+					repositorio.Alta(inquilino);
+					TempData["Alta"] = "Inquilino agregado exitosamente!";
+					return RedirectToAction(nameof(Index));
+				}
+				else
+					return View();	
 			}
 			catch(Exception ex)
 			{
@@ -75,8 +87,8 @@ namespace Inmobiliaria_.Net_Core.Controllers
                 p.Direccion = collection["Direccion"];
                 p.Telefono = collection["Telefono"];
                 repositorio.Modificacion(p);
-                TempData["Id"] = "";
-                return RedirectToAction(nameof(Index));
+				TempData["Alta"] = "Datos modificados con exito!";
+				return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
@@ -99,15 +111,15 @@ namespace Inmobiliaria_.Net_Core.Controllers
             try
             {
                 repositorio.Baja(id);
-                TempData["Id"] = "";
-                return RedirectToAction(nameof(Index));
-            }
+				TempData["Alta"] = "Inquilino eliminado";
+				return RedirectToAction(nameof(Index));
+			}
             catch (Exception ex)
             {
-                ViewBag.Error = "";
+                ViewBag.Error = "Inquilino con contrato vigente";
                 ViewBag.StackTrate = ex.StackTrace;
-                return View(entidad);
-            }
+				return View();
+			}
         }
     }
 }

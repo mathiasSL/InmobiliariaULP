@@ -21,14 +21,37 @@ namespace Inmobiliaria_.Net_Core.Controllers
         public ActionResult Index()
         {
             var lista = repoPago.ObtenerTodos();
-            return View(lista);
+			if (TempData.ContainsKey("Alta"))
+				ViewBag.Alta = TempData["Alta"];
+			if (TempData.ContainsKey("Error2"))
+				ViewBag.Error2 = TempData["Error2"];
+			return View(lista);
         }
 
 		public ActionResult Create()
 		{
-			ViewBag.pago = repoPago.ObtenerTodos();
+			//ViewBag.pago = repoPago.ObtenerTodos();
 			ViewBag.alquiler = repoAlquiler.ObtenerTodos();
-			return View();
+
+			int resultado = 0;
+
+			foreach (var item in (IList<Alquiler>)ViewBag.alquiler)
+			{
+				if (!item.IdAlquiler.Equals(" "))
+				{
+					resultado++;
+				}
+			}
+
+			if (resultado > 0)
+			{
+				return View();
+			}
+			else
+			{
+				TempData["Error2"] = "No hay contratos de alquileres disponibles";
+				return RedirectToAction(nameof(Index));
+			}
 		}
 
 		[HttpPost]
@@ -38,7 +61,7 @@ namespace Inmobiliaria_.Net_Core.Controllers
 			try
 			{
 			    repoPago.Alta(pago);
-				TempData["Id"] = "Se creó correctamente";
+				TempData["Alta"] = "Se creó correctamente";
 				return RedirectToAction(nameof(Index));
 			}
 			catch (Exception ex)
@@ -47,8 +70,8 @@ namespace Inmobiliaria_.Net_Core.Controllers
 				ViewBag.alquiler = repoAlquiler.ObtenerTodos();
 				ViewBag.Error = ex.Message;
 				ViewBag.StackTrate = ex.StackTrace;
-				return View(pago);
-				//return RedirectToAction(nameof(Index));
+				return View();
+				
 			}
 		}
 
@@ -66,14 +89,14 @@ namespace Inmobiliaria_.Net_Core.Controllers
 			try
 			{
 				repoPago.Baja(id);
-				TempData["Id"] = "";
+				TempData["Alta"] = "Pago eliminado";
 				return RedirectToAction(nameof(Index));
 			}
 			catch (Exception ex)
 			{
 				ViewBag.Error = ex.Message;
 				ViewBag.StackTrate = ex.StackTrace;
-				return View(entidad);
+				return View();
 			}
 		}
 
@@ -91,14 +114,14 @@ namespace Inmobiliaria_.Net_Core.Controllers
 			{
 				entidad.IdPago = id;
 				repoPago.Modificacion(entidad);
-				TempData["Id"] = "";
+				TempData["Alta"] = "Datos modificados con exito!";
 				return RedirectToAction(nameof(Index));
 			}
 			catch (Exception ex)
 			{
 				ViewBag.Error = ex.Message;
 				ViewBag.StackTrate = ex.StackTrace;
-				return View(entidad);
+				return View();
 			}
 		}
 

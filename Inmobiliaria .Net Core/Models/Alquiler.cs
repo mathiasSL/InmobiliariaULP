@@ -10,16 +10,16 @@ namespace Inmobiliaria_.Net_Core.Models
 	{
         [Key]
         public int IdAlquiler { get; set; }
-
-        public decimal Importe { get; set; }
-
-        public string FechaInicio { get; set; }
-
-        public string FechaFin { get; set; }
-
-        public int IdInquilino { get; set; }
-
-        public int IdInmueble { get; set; }
+		[Required]
+		public decimal Importe { get; set; }
+		[Required]
+		public string FechaInicio { get; set; }
+		[Required]
+		public string FechaFin { get; set; }
+		[Required]
+		public int IdInquilino { get; set; }
+		[Required]
+		public int IdInmueble { get; set; }
 
         public Inquilino Inquilino { get; set; }
 
